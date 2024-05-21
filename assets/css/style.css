@@ -1,15 +1,11 @@
-
 * {
-    box-sizing: border-box;
-    font-family: 'Raleway', sans-serif, serif;
-    flex-wrap: wrap;
-    border: 1px solid green;
-}
-
-body, html{
     margin: 0;
     padding: 0;
-    width: 100%; 
+}
+
+body {
+    box-sizing: border-box;
+    font-family: 'Raleway', sans-serif, serif;
     height: 100vh;
     background-color: rgb(233, 230, 230);
   }
@@ -21,28 +17,44 @@ body, html{
     text-align: right;
 }
 
+/* h1 {
+    padding: 8px 25px;
+} */
+/* 
 main {
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
 }
 
-.searchArea {
+#weather-container {
     background-color: lightblue;
+    padding: 10%;
 }
 
-#citySearchBtn {
+#city-searchbtn {
     background-color: blueviolet;
     color: white;
+    width: 100%;
 }
 
+.btn {
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+#deleteBtn {
+    background-color: rgb(255, 242, 192);
+    color: red;
+    width: 100%;
+}
 .topResult {
     background-color: pink;
-}
+} */
+
 
 
 /* our media querys to handle when the page is too small and data does not fit. */
-@media screen and (max-width: 1450px) {
+/* @media screen and (max-width: 1450px) {
     #repo-table {
         display: flex;
         flex-direction: column;
@@ -54,7 +66,7 @@ main {
     h1 {
         font-size: 16px;
     }
-}
+} */
 
 /* NOTES NOTES NOTES NOTES NOTES NOTES 
 class="navBar"

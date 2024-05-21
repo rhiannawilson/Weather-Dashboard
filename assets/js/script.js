@@ -1,93 +1,105 @@
-const APIKey = "8cdd7775eb0718887c45fd5129681ea1";
-const tableBody = document.getElementById('repoTable')
-const citySearchBtn = document.getElementById('citySearchBtn')
-let city;
+// declaring variables 
 
-// Browser Fetch Method
-// fetch returns an api call by calling the fetch() method itself and the method acceots a parameter which happens to be 
-// the location of our endpoiint i.e. the url link to weather api
-// once the fetch method has finished calling the endpoint, it then calls the 'then' function() and passes a function with a 
-// parameter named response.
-// the function then returns an JSON object after calliung the response.json() method
-// which then also calls another then () function() and passes the parameter named "data" which is 
-// based off the "return" of the previous "then()" function
-// this is then followed by logging of the "data" object.
+const weatherContainer = document.getElementById('weather-container')
+const tableBody = document.getElementById('repo-table');
+const fetchBtn = document.getElementById('fetch-btn');
+const apiKey = '8cdd7775eb0718887c45fd5129681ea1';
+const search = document.getElementById('city');
 
-function getApi() {
-    const requestUrl = 'https://openweathermap.org/forecast5'; //when you have your weather forecast API web link insert HERE
-    fetch(requestUrl)
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function (data) {
-        //using a `for...of` loop here to write less code than 'for' loops, and we don't need to keep track of the index `(i)`.
 
-        for (const repo of data) {
-            //creating the elements of the table, row, data and anchor
-            const createTableRow = document.createElement('tr');
-            const tableData = document.createElement('td');
-            const link = document.createElement('a');
+function getApi(searchCity){
+console.log(searchCity);
+// url to openweathermap resource
+const requestUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${searchCity}&limit=5&appid=${apiKey}`;
 
-            //setting the text of Link and the href of the link
-            link.textContent = repo.html_url;
-            link.href = repo.html_url;
 
-            //appending the link to the tabledata and then appending the tabledata to the tablerow 
-            // the tablerow then gets appended to the tablebody 
-            tableData.appendChild(link);
-            createTableRow.appendChild(tableData);
-            tableBody.appendChild(createTablerow);
-        }
-    });
+// fetching a response of data 
+fetch(requestUrl)
+.then(function (response) {
+return response.json();
+})
+.then(function (data) {
+console.log(data);
+getWeatherApi(data[0])
+}
+)};
+
+
+// EXAMPLE OF Storing data:
+  // const myObj = { name: "John", age: 31, city: "New York" };
+  // const myJSON = JSON.stringify(myObj);
+  // localStorage.setItem("testJSON", myJSON);
+  // console.log(localStorage);
+
+// EXAMPLE OF Retrieving data:
+  // let text = localStorage.getItem("testJSON");
+  // let obj = JSON.parse(text);
+  // document.getElementById("demo").innerHTML = obj.name;
+
+
+function getWeatherApi(location){
+console.log(location);
+let {lat, lon} = location;
+let city = location.name;
+const requestUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+
+// Initiating a fetch request to the URL specified in requestURL
+fetch(requestUrl) 
+.then(function (response) {
+return response.json(); 
+
+// A promise callback that handles the response from the fetch request. 
+// It takes the response object and calls the json() method on it to parse the response body as JSON. 
+// This returns another Promise that resolves to the parsed JSON data.
+})
+.then(function (data) {
+console.log(data);
+currentDay(data.list[0], city)
+// This is another Promise callback that handles the parsed JSON data from the previous step. 
+// It logs the data to the console using console.log(data) and then calls the currentDay() function
+// with the first item in the list property of the data object and the city variable as arguments.
+})
+.catch(function(error) {
+}
+)};
+
+function getCity (e){
+if (!search.value) {
+return;
+}
+e.preventDefault();
+const searchCity = search.value.trim();
+if (searchCity) {
+  getApi(searchCity);
+search.value = ''; // Clear the input field
+} else {
+  alert('Please enter a city name');
+} return;
 };
 
-fetchSearchBtn.addEventListener('click', getApi);
+// functions aren't variables so you don't need a semi-colon
 
+fetchBtn.addEventListener('click', getCity);    
 
-// DONE: GIVEN a weather dashboard with form inputs
+// Retrieve weather data from local storage
+const weatherData = JSON.parse(localStorage.getItem('weatherData'));
 
-// TO DO: WHEN I search for a city
-    // THEN I am presented with current and future conditions for that city and that city is added to the search history
+// Extract relevant information from the data
+const city = weatherData.getCity;
+const temperature = weatherData.temperature;
+const description = weatherData.description;
 
-// TO DO: WHEN I view current weather conditions for that city
-    // THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, and the wind speed
+// Create HTML elements to display the weather information
+const sideContainer = document.getElementById('side-container');
+const cityElement = document.createElement('h2');
+cityElement.textContent = `City: ${getCity}`;
+const tempElement = document.createElement('p');
+tempElement.textContent = `Temperature: ${temperature}°C`;
+const descElement = document.createElement('p');
+descElement.textContent = `Description: ${description}`;
 
-// TO DO: WHEN I view future weather conditions for that city
-    // THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
-
-// TO DO: WHEN I click on a city in the search history
-    // THEN I am again presented with current and future conditions for that city
-
-
-
-
-
-/* NOTES NOTES NOTES NOTES NOTES NOTES 
-class="navBar"
-<h1>Weather Dashboard
-
-<main>
-<section class="citySearchBtn">
-<div>
-<h4>Search for a city:</h4>
-<form>
-<input type="text" id="cityInput" placeholder="Enter your City Here..."><br><br>
-<button class="btn btn-danger" type="submit" id="citySearchBtn">Search</button>
-
-<!-- We place the delete button in a different section so that we wont have to keep reloading it each time we generate the history buttons. -->
-<div class="btn-group" role="group" aria-label="Search history" id="searchHistory"></div>
-<button type="button" class="btn btn-danger col" id="deleteBtn">Delete Search History</button>
-
-
-<!-- Top Results of Weather forecaset TODAY'S result -->
-<section class="topResult">
-<div id="currentWeather"></div>
-
-<!-- 2nd section of the 5-day Results -->
-
-<section class="remainingRslts flex-row justify-center align-center col-auto p-4 bg-light">
-<div class="text-center pt-4">
-<table class="card-body table mx-auto my-4">
-<th><p class="my-4">5-Day Forecast:</p>
-<tbody id="repo-table" class="mx-auto text-center">
- */
+// Append the elements to the container
+weatherContainer.appendChild(CityElement);
+weatherContainer.appendChild(tempElement);
+weatherContainer.appendChild(descElement);
+   
