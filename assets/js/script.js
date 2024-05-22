@@ -1,14 +1,8 @@
-// function getWeatherApi(location){
-//   console.log(location);
-//   let {lat, lon} = location;
-//   let city = location.name;
-//   const requestUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
-  
-
 const cityInput = document.querySelector(".city-input");
 const searchButton = document.querySelector(".search-btn");
 const currentWeatherDiv = document.querySelector(".current-weather");
 const weatherCardsDiv = document.querySelector(".weather-cards");
+
 
 
 const apiKey = "8cdd7775eb0718887c45fd5129681ea1";
@@ -34,8 +28,6 @@ const createWeatherCard = (cityName, weatherItem, index) => {
       <h4>Humidity: ${weatherItem.main.humidity}%</h4>
     </li>`;
   }
-
-
 }
 
 const getWeatherDetails = (cityName, lat, lon) => {
@@ -88,4 +80,68 @@ getWeatherDetails(name, lat, lon);
 });
 }
 
+
 searchButton.addEventListener("click", getCityCoordinates);
+
+
+
+  // Select the delete button
+  const deleteButton = document.querySelector('.delete-btn');
+
+
+  // Add click event listener to the delete button
+  deleteButton.addEventListener('click', function() {
+
+    // Select the list to be cleared
+    const historyList = document.getElementById('delHistory');
+
+    // Clear the list content
+    historyList.innerHTML = '';
+
+    // Optionally, you can also reset any associated data or perform additional actions
+  });
+
+    // Function to display history list
+    function displayHistoryList() {
+      const historyList = document.getElementById('delHistory');
+      // Clear existing list items
+      historyList.innerHTML = '';
+  
+      // Retrieve history from localStorage and parse it (assuming it's an array of strings)
+      const history = JSON.parse(localStorage.getItem('history')) || [];
+  
+      // Create list items for each history item and append them to the history list
+      history.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.textContent = item;
+        historyList.appendChild(listItem);
+      });
+    }
+  
+
+    // Add another event listener to searchButton to create a history list
+    searchButton.addEventListener('click', function() {
+      // entered city to history
+      const enteredCity = cityInput.value.trim();
+      if (enteredCity) {
+        // Retrieve existing history from localStorage or initialize it as an empty array
+        const history = JSON.parse(localStorage.getItem('history')) || [];
+        // Add the entered city to history
+        history.push(enteredCity);
+        // Save updated history back to localStorage
+        localStorage.setItem('history', JSON.stringify(history));
+  
+        // Display the updated history list
+        displayHistoryList();
+      }
+    });
+  
+    deleteButton.addEventListener('click', function() {
+      // Perform delete history actions here
+      // For example, you can clear the history from localStorage and update the displayed history list
+      localStorage.removeItem('history');
+      displayHistoryList();
+    });
+  
+    // Display history list on page load
+    displayHistoryList();
