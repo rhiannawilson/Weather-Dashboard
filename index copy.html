@@ -9,13 +9,19 @@
 </head>
 
 <body>
+
+  <header>
+    <nav class="navBar">
       <h1>Weather Dashboard</h1>
+    </nav>
+  </header>
+  
   <div class="container">
     <div class="weather-input">
       <h3>Enter a City Name</h3>
       <input class="city-input" type="text" placeholder="e.g., New York, London, Tokyo">
-      <div class="separator"></div>
-      <button class="search-btn">Use Current Location</button>
+      <!-- <div class="separator"></div> -->
+      <button class="search-btn">Search</button>
     </div>
     <div class="weather-data">
       <div class="current-weather">
@@ -25,8 +31,10 @@
           <h4>Wind: &nbsp; M/S</h4>
           <h4>Humidity: &nbsp; %</h4>
         </div>
-    
       </div>
+
+  
+      <!-- 5-days forecast display  -->
       <div class="days-forecast"></div>
       <h2>5-day forecast</h2>
       <ul class="weather-cards">
@@ -69,8 +77,3 @@
 </body>
 
 </html>
-<!-- 
-//    <div class="icon">
-  <img src="https://openweathermap.org/img/wn10d@4x.png" alt="weather-icon">
-  <h4>Moderate Rain</h4>
-</div> -->
