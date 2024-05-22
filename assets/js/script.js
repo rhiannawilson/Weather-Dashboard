@@ -3,8 +3,6 @@ const searchButton = document.querySelector(".search-btn");
 const currentWeatherDiv = document.querySelector(".current-weather");
 const weatherCardsDiv = document.querySelector(".weather-cards");
 
-
-
 const apiKey = "8cdd7775eb0718887c45fd5129681ea1";
 const createWeatherCard = (cityName, weatherItem, index) => { 
   if(index === 0) { // HTML for the main weather card
@@ -30,6 +28,8 @@ const createWeatherCard = (cityName, weatherItem, index) => {
   }
 }
 
+
+//retrieve weather lat & lon
 const getWeatherDetails = (cityName, lat, lon) => {
   const WEATHER_API_URL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
 
@@ -49,14 +49,13 @@ const getWeatherDetails = (cityName, lat, lon) => {
     weatherCardsDiv.innerHTML = "";
 
 
+
 // creating weather cards and adding them to the DOM
 fiveDaysForecast.forEach((weatherItem, index) => {
   if(index === 0){
     currentWeatherDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index));
-
   } else{
     weatherCardsDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index));
-
   }
 });
   }).catch (() => {
@@ -65,6 +64,7 @@ fiveDaysForecast.forEach((weatherItem, index) => {
 }
 
 
+// Search Section:
 const getCityCoordinates = () => {
   const cityName = cityInput.value.trim(); // get user to enter city name and remove extra spaces
   if(!cityName) return; //returns if cityName is empty
@@ -81,13 +81,14 @@ getWeatherDetails(name, lat, lon);
 }
 
 
-searchButton.addEventListener("click", getCityCoordinates);
+  // Add click event listener to the search button
+  searchButton.addEventListener("click", getCityCoordinates);
 
 
 
+// Delete History Section:
   // Select the delete button
   const deleteButton = document.querySelector('.delete-btn');
-
 
   // Add click event listener to the delete button
   deleteButton.addEventListener('click', function() {
@@ -97,13 +98,12 @@ searchButton.addEventListener("click", getCityCoordinates);
 
     // Clear the list content
     historyList.innerHTML = '';
-
-    // Optionally, you can also reset any associated data or perform additional actions
   });
 
     // Function to display history list
     function displayHistoryList() {
       const historyList = document.getElementById('delHistory');
+
       // Clear existing list items
       historyList.innerHTML = '';
   
@@ -145,3 +145,5 @@ searchButton.addEventListener("click", getCityCoordinates);
   
     // Display history list on page load
     displayHistoryList();
+
+    
